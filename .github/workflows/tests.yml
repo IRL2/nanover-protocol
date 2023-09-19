@@ -12,10 +12,7 @@ jobs:
         shell: bash -el {0}
     steps:
       - uses: actions/checkout@v3
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          auto-update-conda: true
-          miniforge-version: latest
+      - uses: ./.github/composite/conda.yml
       - name: Install narupa dependancies
         run: conda install mpi4py openmm
       - name: Install tests dependancies
