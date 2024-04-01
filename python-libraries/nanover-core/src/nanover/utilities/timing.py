@@ -1,9 +1,8 @@
 """
 Module providing time-dependent utility methods.
 """
-
+import sys
 import time
-import os
 from threading import RLock
 
 
@@ -14,7 +13,7 @@ from threading import RLock
 # address this issue, a more dependable, low-level sleep function is employed.
 # This solution will become less critical in the future once an application
 # scheduler has been implemented.
-if os.name == 'nt':
+if sys.platform == 'win32':
     import ctypes
     from ctypes.wintypes import LARGE_INTEGER
 
