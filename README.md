@@ -129,6 +129,8 @@ Optionally, you can run most of the tests in parallel with pytest-xdist:
     python -m pytest python-libraries -n auto -m 'not serial'
     python -m pytest python-libraries -n0 -m 'serial'
 
+The test suite contains a utility test that will open the default NanoVer port and not close it properly. Such behaviour can cause other tests to fail because they need to port and it is unavailable. To activate the `test_leak_default_port` utility test, set the `NANOVER_PRT_LEAK` environment variable to `pass` or `fail`. The utility test will pass or fail based on the value of the environment variable. The test won't be defined if the environment variable is not set or if it is set to any other value.
+
 ## Running the examples
 
 ### ASE IMD Simulations
