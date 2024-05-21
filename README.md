@@ -174,6 +174,17 @@ Because of the special setup required you will probably not be able to run this 
 
 ## Running the examples
 
+### OpenMM IMD Simulations
+
+`nanover.openmm` provides a command line interface for running serialised OpenMM simulations. For example, from the `nanover-protocol` directory:
+
+    nanover-omm-server examples/openmm/openmm_files/17-ala.xml
+
+The example files and a Jupyter notebook are distributed in the directory
+`examples/openmm/` from the [git repository](https://github.com/IRL2/nanover-protocol/tree/main/examples/openmm). Further 
+information about serialising an OpenMM simulation for Nanover can be found [here](https://irl2.github.io/nanover/python/nanover.openmm.serializer.html) 
+in our documentation.
+
 ### ASE IMD Simulations
 
 `nanover.ase` provides a command line interface for running serialised OpenMM simulations. For example, from the `nanover-protocol` directory:
