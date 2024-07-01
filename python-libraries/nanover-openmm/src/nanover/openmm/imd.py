@@ -90,7 +90,6 @@ class NanoverImdReporter:
         imd_force: mm.CustomExternalForce,
         imd_state: ImdStateWrapper,
         frame_publisher: FramePublisher,
-        simulation_counter: int = 0,
     ):
         self.frame_interval = frame_interval
         self.force_interval = force_interval
@@ -109,7 +108,6 @@ class NanoverImdReporter:
         self._total_user_energy = 0.0
 
         self._did_first_frame = False
-        self._simulation_counter = simulation_counter
 
     # The name of the method is part of the OpenMM API. It cannot be made to
     # conform PEP8.
@@ -179,7 +177,6 @@ class NanoverImdReporter:
         topology = simulation.topology
         try:
             frame_data = openmm_to_frame_data(state=state, topology=topology)
-            frame_data.simulation_counter = self._simulation_counter
         except Exception as err:
             print(f"Error with the first frame: {err}")
         else:
