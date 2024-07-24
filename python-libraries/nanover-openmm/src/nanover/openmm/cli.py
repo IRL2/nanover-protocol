@@ -2,10 +2,15 @@
 Command line interface for nanover.openmm.
 """
 
-import time
+import sys
 import textwrap
 import argparse
-from . import OpenMMRunner
+
+from openmm.app import StateDataReporter
+
+from nanover.app import NanoverImdApplication
+from nanover.omni import OmniRunner
+from nanover.omni.openmm import OpenMMSimulation
 
 
 def handle_user_arguments() -> argparse.Namespace:
@@ -77,29 +82,33 @@ def main():
     """
     arguments = handle_user_arguments()
 
-    runner = OpenMMRunner.from_xml_inputs(
-        input_xmls=arguments.simulation_xml_paths,
+    app_server = NanoverImdApplication.basic_server(
         name=arguments.name,
         address=arguments.address,
         port=arguments.port,
-        platform=arguments.platform,
     )
-    print(
-        f'Serving "{runner.app_server.name}" on port {runner.app_server.port}, '
-        f"discoverable on all interfaces on port {runner.app_server.discovery.port}"
-    )
+    runner = OmniRunner(app_server)
+
+    for path in arguments.simulation_xml_paths:
+        simulation = OpenMMSimulation.from_xml_path(path)
+        simulation.platform = arguments.platform
+        simulation.frame_interval = arguments.frame_interval
+        simulation.force_interval = arguments.force_interval
+
+        if arguments.verbose:
+            simulation.verbose_reporter = StateDataReporter(
+                sys.stdout,
+                arguments.verbose,
+                step=True,
+                speed=True,
+                remainingTime=False,
+                potentialEnergy=True,
+            )
+
+        runner.add_simulation(simulation)
 
     with runner:
-        runner.verbosity_interval = arguments.verbose
-        runner.frame_interval = arguments.frame_interval
-        runner.force_interval = arguments.force_interval
-        runner.run()
-
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print("Closing due to keyboard interrupt.")
+        runner.print_basic_info_and_wait()
 
 
 if __name__ == "__main__":
