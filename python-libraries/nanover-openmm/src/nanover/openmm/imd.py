@@ -319,6 +319,7 @@ def create_imd_force() -> mm.CustomExternalForce:
     force.addPerParticleParameter("fx")
     force.addPerParticleParameter("fy")
     force.addPerParticleParameter("fz")
+    force.setForceGroup(1)
     return force
 
 
